@@ -29,3 +29,9 @@ jobs:
     - name: Train Model
       run: |
         python train.py
+
+    - name: Upload model artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: house-price-model
+        path: house_price_model.pkl
