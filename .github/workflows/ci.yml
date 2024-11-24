@@ -1,3 +1,4 @@
+
 name: CI for House Price Prediction
 
 on:
@@ -11,21 +12,31 @@ on:
 jobs:
   build-and-train:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-    - name: Set Up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.12'
+      - name: Set Up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
 
-    - name: Install Dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pandas numpy scikit-learn matplotlib joblib seaborn
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas numpy scikit-learn matplotlib joblib seaborn
 
-    - name: Train Model
-      run: |
-        python train.py
+      - name: Train Model
+        run: |
+          python (link unavailable)
+
+      - name: Save Metrics
+        run: |
+          echo "MAE: $(cat metrics.txt | grep MAE | cut -d':' -f2)" >> metrics.txt
+          echo "MSE: $(cat metrics.txt | grep MSE | cut -d':' -f2)" >> metrics.txt
+          echo "RMSE: $(cat metrics.txt | grep RMSE | cut -d':' -f2)" >> metrics.txt
+          echo "R2: $(cat metrics.txt | grep R2 | cut -d':' -f2)" >> metrics.txt
+
+      - name: Display Metrics
+        run: |
+          cat metrics.txt
