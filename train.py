@@ -1,40 +1,40 @@
 import pandas as pd
-import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error
 import joblib
 
 # Load dataset
-data = pd.read_csv('data/housing.csv')
+try:
+    data = pd.read_csv('data/Housing.csv')
+    print("Dataset loaded successfully.")
+except FileNotFoundError:
+    print("Error: Dataset not found at 'data/Housing.csv'.")
+    exit()
+
+# Check dataset content
+print("Columns in Dataset:", data.columns)
+if 'price' not in data.columns:
+    print("Error: 'price' column not found in dataset.")
+    exit()
+
+print("Target Column Summary:")
+print(data['price'].describe())
 
 # Preprocess dataset
-data = data.select_dtypes(include=['number']).dropna()  # Use numeric columns and drop NaN
+# Convert categorical columns to numeric using one-hot encoding
+data = pd.get_dummies(data, drop_first=True)
 
-# Shuffle dataset to avoid ordering bias
-data = data.sample(frac=1, random_state=42).reset_index(drop=True)
+# Split features and target
+X = data.drop('price', axis=1)  # Features
+y = data['price']  # Target
 
-# Ensure the target column exists
-if 'SalePrice' in data.columns:
-    y = data['SalePrice']
-    X = data.drop('SalePrice', axis=1)
-else:
-    print("Warning: 'SalePrice' column not found. Using the last column as target.")
-    y = data.iloc[:, -1]
-    X = data.iloc[:, :-1]
+# Check dataset size
+print(f"Dataset size: {data.shape}, Features size: {X.shape}, Target size: {y.shape}")
 
-# Debug: Inspect features and target
-print("Sample Features (X):")
-print(X.head())
-print("Sample Target (y):")
-print(y.head())
-
-# Split dataset
+# Split dataset into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# Debug: Check for overlapping rows
-overlap = pd.merge(X_train, X_test, how='inner')
-print(f"Number of overlapping rows between train and test: {len(overlap)}")
+print(f"Training set size: {X_train.shape}, Testing set size: {X_test.shape}")
 
 # Train model
 model = RandomForestRegressor(n_estimators=100, random_state=42)
@@ -43,9 +43,7 @@ model.fit(X_train, y_train)
 # Evaluate model
 predictions = model.predict(X_test)
 mae = mean_absolute_error(y_test, predictions)
-
-# Debug: Inspect predictions vs actual values
-print("Sample Predictions vs Actual Values:")
+print("Predictions vs Actuals:")
 print(pd.DataFrame({'Predicted': predictions[:5], 'Actual': y_test.values[:5]}))
 
 print(f"Mean Absolute Error: {mae}")
