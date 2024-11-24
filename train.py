@@ -10,11 +10,8 @@ data = pd.read_csv('data/housing.csv')
 # Preprocess dataset
 data = data.select_dtypes(include=['number']).dropna()  # Use numeric columns and drop NaN
 
-# Debug: Inspect dataset structure
-print("Dataset Info:")
-print(data.info())
-print("Dataset Description:")
-print(data.describe())
+# Debug: Shuffle dataset
+data = data.sample(frac=1, random_state=42).reset_index(drop=True)
 
 # Ensure the target column exists
 if 'SalePrice' in data.columns:
@@ -22,24 +19,18 @@ if 'SalePrice' in data.columns:
     X = data.drop('SalePrice', axis=1)
 else:
     print("Warning: 'SalePrice' column not found. Using the last column as target.")
-    y = data.iloc[:, -1]  # Use the last column as the target if 'SalePrice' is not present
+    y = data.iloc[:, -1]
     X = data.iloc[:, :-1]
 
-# Debug: Inspect target variable and features
-print("Features (X) Sample:")
-print(X.head())
-print("Target (y) Sample:")
-print(y.head())
-
-# Shuffle data to avoid ordering bias
-data = data.sample(frac=1, random_state=42).reset_index(drop=True)
+# Debug: Print feature columns
+print("Feature Columns:", X.columns)
 
 # Split dataset
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Debug: Check dataset sizes
-print(f"Training Data Size: {X_train.shape[0]}")
-print(f"Testing Data Size: {X_test.shape[0]}")
+# Debug: Check for overlapping rows
+overlap = pd.merge(X_train, X_test, how='inner')
+print(f"Number of overlapping rows between train and test: {len(overlap)}")
 
 # Train model
 model = RandomForestRegressor(n_estimators=100, random_state=42)
@@ -50,8 +41,9 @@ predictions = model.predict(X_test)
 mae = mean_absolute_error(y_test, predictions)
 
 # Debug: Print predictions and actual values
-print(f"Predictions: {predictions[:5]}")
-print(f"Actual Values: {y_test.values[:5]}")
+print("Sample Predictions vs Actual Values:")
+print(pd.DataFrame({'Predicted': predictions[:5], 'Actual': y_test.values[:5]}))
+
 print(f"Mean Absolute Error: {mae}")
 
 # Save model
