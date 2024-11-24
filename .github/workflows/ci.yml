@@ -13,30 +13,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout the repository
     - name: Checkout Repository
       uses: actions/checkout@v3
 
-    # Step 2: Set up Python environment
     - name: Set Up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.12'
 
-    # Step 3: Install dependencies
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pandas numpy scikit-learn matplotlib joblib
+        pip install pandas numpy scikit-learn matplotlib joblib seaborn
 
-    # Step 4: Train the model
     - name: Train Model
       run: |
         python train.py
-
-    # Step 5: Upload the model artifact
-    - name: Upload Model Artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: house-price-model
-        path: house_price_model.pkl
