@@ -84,3 +84,10 @@ print(f"Model saved as 'house_price_model.pkl'")
 # Check predictions vs true values for RandomForestRegressor
 print("\nPredictions (first 10 values):", rf_predictions[:10])
 print("True values (first 10):", y_test[:10].values)
+
+# Prediction for new house (example: you can replace the values with actual ones for prediction)
+new_data = [[2000, 3, 2, 1, 1, 1, 0, 0, 1, 1, 1, 1]]  # Example features for a new house
+prediction = rf_model.predict(new_data)
+
+# Print the predicted price for the new house
+print(f"\nPredicted price for the new house: {prediction[0]}")
