@@ -6,7 +6,7 @@ import joblib
 
 # Load dataset
 try:
-    data = pd.read_csv(r'C:\Users\aiswarya r\house-price-predictions-ml\data\Housing.csv')
+    data = pd.read_csv('data/Housing.csv')
     print("Dataset loaded successfully.")
 except FileNotFoundError:
     print("Error: Dataset not found at 'data/Housing.csv'.")
