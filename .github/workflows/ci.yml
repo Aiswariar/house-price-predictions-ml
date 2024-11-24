@@ -14,12 +14,12 @@ jobs:
 
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v3 # Latest stable version for repository checkout
 
     - name: Set Up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v4 # No new version yet, compatible with Node.js 20
       with:
-        python-version: '3.12'
+        python-version: '3.12' # Matches your local Python version
 
     - name: Install Dependencies
       run: |
