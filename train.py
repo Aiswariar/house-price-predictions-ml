@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_absolute_error, mean_squared_error
+from sklearn.metrics import mean_absolute_error
 import joblib
 import os
 import matplotlib.pyplot as plt
@@ -65,9 +65,7 @@ linear_model.fit(X_train, y_train)
 # Evaluate Linear Regression model
 predictions = linear_model.predict(X_test)
 mae_linear = mean_absolute_error(y_test, predictions)
-mse_linear = mean_squared_error(y_test, predictions)
 print(f"Mean Absolute Error (Linear Regression): {mae_linear}")
-print(f"Mean Squared Error (Linear Regression): {mse_linear}")
 
 # Train the RandomForestRegressor model
 print("\nTraining with RandomForestRegressor...")
@@ -77,9 +75,7 @@ rf_model.fit(X_train, y_train)
 # Evaluate RandomForestRegressor model
 rf_predictions = rf_model.predict(X_test)
 mae_rf = mean_absolute_error(y_test, rf_predictions)
-mse_rf = mean_squared_error(y_test, rf_predictions)
 print(f"Mean Absolute Error (RandomForestRegressor): {mae_rf}")
-print(f"Mean Squared Error (RandomForestRegressor): {mse_rf}")
 
 # Save the best model (RandomForestRegressor in this case)
 joblib.dump(rf_model, 'house_price_model.pkl')
@@ -87,21 +83,4 @@ print(f"Model saved as 'house_price_model.pkl'")
 
 # Check predictions vs true values for RandomForestRegressor
 print("\nPredictions (first 10 values):", rf_predictions[:10])
-print("True values (first 10):", y_test[:10].values)
-
-# Prediction for new house (example: you can replace the values with actual ones for prediction)
-new_data = [[2000, 3, 2, 1, 1, 1, 0, 0, 1, 1, 1, 1]]  # Example features for a new house
-prediction = rf_model.predict(new_data)
-
-# Print the predicted price for the new house
-print(f"\nPredicted price for the new house: {prediction[0]}")
-
-# Plotting Predicted vs Actual values
-plt.figure(figsize=(8,6))
-plt.scatter(y_test, rf_predictions, color='blue', label='Predicted vs Actual')
-plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', linestyle='--', label='Ideal Fit')
-plt.title('Predicted vs Actual Prices (Random Forest)')
-plt.xlabel('Actual Price')
-plt.ylabel('Predicted Price')
-plt.legend()
-plt.show()
+print("True values (first 10):", y_test[:10].values)   
